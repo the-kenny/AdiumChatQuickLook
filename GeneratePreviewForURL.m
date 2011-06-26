@@ -9,16 +9,16 @@
 #define HTML_FOOTER @"</body></html>"
 
 #define CHATLOG_STYLE \
-@"h1 {font-family: Helvetica, sans-serif;font-size: 13pt}" \
+@"h1 {font-family: Helvetica, sans-serif;font-size: 10pt}" \
 @".other { color:blue; }" \
 @".me { color: green; }" \
-@".time {font-size: 12pt;} "\
+@".time {font-size: 10pt;} "\
 @"tr {font-family: Helvetica; vertical-align: top;}" \
-@"td.who {text-align: right;}" \
-@"td.what { }" 
+@"td.who {font-size: 10pt; text-align: right; width: 15%;}" \
+@"td.what {font-size: 10pt;}" 
 
 #define HTMLLOG_STYLE \
-@"h1 {font-family: Helvetica, sans-serif; font-size: 13pt;}" \
+@"h1 {font-family: Helvetica, sans-serif; font-size: 10pt;}" \
 @"body {font-family: Helvetica; font-size: 10pt;}" \
 @".receive { color:blue; }" \
 @".send { color: green; }" \
