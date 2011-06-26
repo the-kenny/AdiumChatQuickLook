@@ -12,7 +12,7 @@
 @"h1 {font-family: Helvetica, sans-serif;font-size: 10pt}" \
 @".other { color:blue; }" \
 @".me { color: green; }" \
-@".time {font-size: 10pt;} "\
+@"td.time {font-size: 10pt; color: grey;} "\
 @"tr {font-family: Helvetica; vertical-align: top;}" \
 @"td.who {font-size: 10pt; text-align: right; width: 15%;}" \
 @"td.what {font-size: 10pt;}" 
