@@ -48,7 +48,7 @@ NSString *formatDate(NSString *s)
 	// Extract the hours
 	NSDateFormatter *hoursFormatter = [[[NSDateFormatter alloc] init] autorelease];
 	[hoursFormatter setTimeStyle:NSDateFormatterShortStyle];
-	[hoursFormatter	setDateFormat:@"HH:mm"];
+	[hoursFormatter	setDateFormat:@"HH:mm:ss"];
 	
 	return [hoursFormatter stringFromDate:date];
 }
