@@ -62,6 +62,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 {
 	NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
 
+    BOOL showFontStyles = NO;
+    
 	NSError *error = nil;
 	NSMutableString *html = [NSMutableString string];
 	NSString *path = [(NSURL *)url path];
@@ -118,8 +120,13 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 					sender = alias;
               
 				// Extract the message tag, we could get rid of the span tag too.
-				NSString *content = [[message elementsForName:@"div"] objectAtIndex:0];
-
+				NSXMLElement *content = [[message elementsForName:@"div"] objectAtIndex:0];
+                if(showFontStyles == NO) {
+                    NSArray* spans = [content elementsForName:@"span"];
+                    if(spans.count > 0)
+                        content = [[spans objectAtIndex:0] objectValue];
+                }
+                
 				[html appendFormat: 
 					@"<tr><td class=\"time\">%@</td><td class=\"who\"><span class=\"%@\">%@</span>:</td><td class=\"what\">%@</td></tr>\n", 
 					time, spanstyle, sender, content];
@@ -137,7 +144,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 
 	[html appendString:HTML_FOOTER];	
 
-	NSLog(@"%@", html);
+    NSLog(@"%@", html);
 	
 	NSDictionary *props = [NSDictionary dictionaryWithObjectsAndKeys:
 		@"UTF-8", (NSString *)kQLPreviewPropertyTextEncodingNameKey,
