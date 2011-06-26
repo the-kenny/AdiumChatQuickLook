@@ -35,18 +35,18 @@
 NSString *formatDate(NSString *s)
 {
 	// Remove : of time zone
-	NSMutableString *dateString = [s mutableCopy];
+	NSMutableString *dateString = [[s mutableCopy] autorelease];
 	if ([dateString characterAtIndex: [dateString length] - 3] == ':')
 		[dateString deleteCharactersInRange: NSMakeRange([dateString length] - 3, 1)];
 	
 	// Create NSDate
-	NSDateFormatter *ISO8601Formatter = [[NSDateFormatter alloc] init];
+	NSDateFormatter *ISO8601Formatter = [[[NSDateFormatter alloc] init] autorelease];
 	[ISO8601Formatter setTimeStyle:NSDateFormatterFullStyle];
 	[ISO8601Formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
 	NSDate *date = [ISO8601Formatter dateFromString:dateString];
 	
 	// Extract the hours
-	NSDateFormatter *hoursFormatter = [[NSDateFormatter alloc] init];
+	NSDateFormatter *hoursFormatter = [[[NSDateFormatter alloc] init] autorelease];
 	[hoursFormatter setTimeStyle:NSDateFormatterShortStyle];
 	[hoursFormatter	setDateFormat:@"HH:mm"];
 	
