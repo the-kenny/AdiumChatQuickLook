@@ -62,6 +62,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 {
 	NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
 
+    BOOL debugLog = YES;
     BOOL showFontStyles = NO;
     
 	NSError *error = nil;
@@ -144,7 +145,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 
 	[html appendString:HTML_FOOTER];	
 
-    NSLog(@"%@", html);
+    if(debugLog)
+        NSLog(@"%@", html);
 	
 	NSDictionary *props = [NSDictionary dictionaryWithObjectsAndKeys:
 		@"UTF-8", (NSString *)kQLPreviewPropertyTextEncodingNameKey,
