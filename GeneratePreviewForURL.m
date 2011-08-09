@@ -53,6 +53,17 @@ NSString *formatDate(NSString *s)
 	return [hoursFormatter stringFromDate:date];
 }
 
+void removeStyleRecursive(NSXMLElement* el) {
+    if(el.kind == NSXMLElementKind) {
+        [el removeAttributeForName:@"class"];
+        [el removeAttributeForName:@"style"];
+    }
+    
+    for(NSXMLElement* child in [el children]) {
+        removeStyleRecursive(child);
+    }
+}
+
 
 OSStatus GeneratePreviewForURL(void *thisInterface,
                                QLPreviewRequestRef preview,
@@ -62,8 +73,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 {
 	NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
 
-    BOOL debugLog = YES;
-    BOOL showFontStyles = NO;
+    BOOL debugLog = NO;
+    BOOL stripFontStyles = YES;
     
 	NSError *error = nil;
 	NSMutableString *html = [NSMutableString string];
@@ -108,6 +119,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 			for (NSXMLElement *message in messageNodes) {
 				if (! --maxMessages)
 					break;
+                
+                NSLog(@"message: %@", message);
 				
 				NSString *alias = [[message attributeForName:@"alias"] stringValue];
 				NSString *sender = [[message attributeForName:@"sender"] stringValue];
@@ -122,11 +135,12 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
               
 				// Extract the message tag, we could get rid of the span tag too.
 				NSXMLElement *content = [[message elementsForName:@"div"] objectAtIndex:0];
-                if(showFontStyles == NO) {
-                    NSArray* spans = [content elementsForName:@"span"];
-                    if(spans.count > 0)
-                        content = [[spans objectAtIndex:0] objectValue];
+                if(stripFontStyles == YES) {
+                    removeStyleRecursive(content);
                 }
+                
+                if(debugLog)
+                    NSLog(@"%@", content);
                 
 				[html appendFormat: 
 					@"<tr><td class=\"time\">%@</td><td class=\"who\"><span class=\"%@\">%@</span>:</td><td class=\"what\">%@</td></tr>\n", 
