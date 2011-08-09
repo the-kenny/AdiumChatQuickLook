@@ -2,7 +2,7 @@
 
 This is a Quicklook generator for Mac OS X 10.5 or later which enables users to show the contents of a Adium Chatlog in a quickview-window. (Space key in Finder.app)
 
-This repository is an indirect fork from [dougharris](https://github.com/dougharris/AdiumChatQuickLook) with modifications by jhagman found in the [adium trac](http://trac.adium.im/ticket/7250)
+This repository is an indirect fork from [Doug Harris](https://github.com/dougharris/AdiumChatQuickLook) with modifications by jhagman found in the [Adium trac](http://trac.adium.im/ticket/7250)
 
 ## Installation ##
 
