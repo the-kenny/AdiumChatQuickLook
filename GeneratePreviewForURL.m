@@ -73,8 +73,10 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 {
 	NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
 
-    BOOL debugLog = NO;
-    BOOL stripFontStyles = YES;
+    //Looks like "normal" NSUserDefaults doesn't work with QuicklookImporter
+    NSDictionary* userDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"im.adium.quicklookImporter"];
+    BOOL debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
+    BOOL stripFontStyles = [[userDefaults valueForKey:@"stripStyles"] boolValue];
     
 	NSError *error = nil;
 	NSMutableString *html = [NSMutableString string];
@@ -120,8 +122,6 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 				if (! --maxMessages)
 					break;
                 
-                NSLog(@"message: %@", message);
-				
 				NSString *alias = [[message attributeForName:@"alias"] stringValue];
 				NSString *sender = [[message attributeForName:@"sender"] stringValue];
 				NSString *spanstyle = [sender caseInsensitiveCompare:account] == NSOrderedSame ? @"me" : @"other";
