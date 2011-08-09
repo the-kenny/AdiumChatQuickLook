@@ -6,7 +6,15 @@ This repository contains my modifications to the importer originally developed b
 
 All credits belong to jhagman
 
-## Stripping Font Styles ##
+## Installation ##
+
+    xcodebuild -configuration Release
+    cp -r build/Release/AdiumChatQuickLook.qlgenerator ~/Library/QuickLook/
+    killall quicklookd32
+
+## Configuration ##
+
+### Stripping Font Styles ###
 
 If you don't want to see user-styles in the Quicklook-Window, run the following:
 
@@ -16,7 +24,7 @@ You can re-enable styles with the following command:
 
     defaults write im.adium.quicklookImporter stripStyles -bool false
 
-## Changing Message Limit ##
+### Changing Message Limit ###
 
 The quicklook generator shows up to 50 messages per-default. You can change the limit with the following command:
 
