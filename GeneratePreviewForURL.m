@@ -117,7 +117,11 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 		if ([messageNodes count] > 0) {
 			[html appendString:@"<table border=\"0\" cellpadding=\"2\">"];
 
-			NSUInteger maxMessages = 50;
+			NSUInteger maxMessages = [[userDefaults valueForKey:@"messageLimit"] unsignedIntegerValue];
+            if(maxMessages <= 0)
+                maxMessages = 50;
+            
+            
             NSUInteger messageCount = [messageNodes count];
             NSUInteger currentMessage = 1;
 			for (NSXMLElement *message in messageNodes) {

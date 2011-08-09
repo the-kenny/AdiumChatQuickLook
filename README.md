@@ -15,3 +15,11 @@ If you don't want to see user-styles in the Quicklook-Window, run the following:
 You can re-enable styles with the following command:
 
     defaults write im.adium.quicklookImporter stripStyles -bool false
+
+## Changing Message Limit ##
+
+The quicklook generator shows up to 50 messages per-default. You can change the limit with the following command:
+
+    defaults write im.adium.quicklookImporter messageLimit -integer NUMBER
+
+where NUMBER is the limit you want to set.
