@@ -117,10 +117,15 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 		if ([messageNodes count] > 0) {
 			[html appendString:@"<table border=\"0\" cellpadding=\"2\">"];
 
-			int maxMessages = 50 + 1;
+			NSUInteger maxMessages = 50;
+            NSUInteger messageCount = [messageNodes count];
+            NSUInteger currentMessage = 1;
 			for (NSXMLElement *message in messageNodes) {
-				if (! --maxMessages)
+				if (currentMessage >= maxMessages) { 
+                    //Append "xx more messages" message
+                    [html appendFormat:@"<tr><td class=\"time\" colspan=\"3\">%u more messages</td></tr>\n", messageCount-currentMessage];
 					break;
+                }
                 
 				NSString *alias = [[message attributeForName:@"alias"] stringValue];
 				NSString *sender = [[message attributeForName:@"sender"] stringValue];
@@ -145,6 +150,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 				[html appendFormat: 
 					@"<tr><td class=\"time\">%@</td><td class=\"who\"><span class=\"%@\">%@</span>:</td><td class=\"what\">%@</td></tr>\n", 
 					time, spanstyle, sender, content];
+                
+                ++currentMessage;
 			}
 			[html appendString:@"</table>"];
 		}
