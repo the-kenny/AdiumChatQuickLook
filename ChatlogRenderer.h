@@ -12,10 +12,10 @@
     NSURL* _url;
 }
 
-+ (NSString*)generateHTMLForURL:(NSURL*)url;
+- (NSString*)generateHTMLForURL:(NSURL*)url;
 
-+ (NSXMLElement*)generateHead;
-+ (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement;
+- (NSXMLElement*)generateHead;
+- (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement;
 
 + (NSString*)formatDate:(NSString*)s;
 + (void)removeStyleRecursive:(NSXMLElement*)el;

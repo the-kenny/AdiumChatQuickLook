@@ -72,7 +72,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 				return 1;
 		}
         
-        NSString* returnValue = [ChatlogRenderer generateHTMLForURL:[NSURL fileURLWithPath:path]];
+        ChatlogRenderer* renderer = [[[ChatlogRenderer alloc] init] autorelease];
+        NSString* returnValue = [renderer generateHTMLForURL:[NSURL fileURLWithPath:path]];
         
         NSDictionary *props = [NSDictionary dictionaryWithObjectsAndKeys:
                                @"UTF-8", (NSString *)kQLPreviewPropertyTextEncodingNameKey,

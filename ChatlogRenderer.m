@@ -12,7 +12,14 @@
 
 #define PROJECT_ID @"im.adium.quicklookImporter"
 
-+ (NSString*)generateHTMLForURL:(NSURL*)url {
+- (void)dealloc {
+    [_url release];
+    [super dealloc];
+}
+
+- (NSString*)generateHTMLForURL:(NSURL*)url {
+    _url = [url retain];
+    
     NSDictionary* userDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:PROJECT_ID];
     BOOL debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
     BOOL stripFontStyles = [[userDefaults valueForKey:@"stripStyles"] boolValue];
@@ -36,11 +43,11 @@
 
     NSXMLElement* bodyElement = [NSXMLElement
                                  elementWithName:@"body" 
-                                 children:[NSArray arrayWithObject:[ChatlogRenderer generateTableFromChatElement:chatNode]]
+                                 children:[NSArray arrayWithObject:[self generateTableFromChatElement:chatNode]]
                                  attributes:nil];
     NSXMLDocument* htmlElement = [NSXMLElement elementWithName:@"html"
                                                      children:[NSArray arrayWithObjects:
-                                                               [ChatlogRenderer generateHead],
+                                                               [self generateHead],
                                                                bodyElement, nil]
                                                    attributes:nil];
     
@@ -49,7 +56,7 @@
                                  
 #pragma mark - Methods to generate HTML
                                  
-+ (NSXMLElement*)generateHead {
+- (NSXMLElement*)generateHead {
     NSString* cssStyle = [NSString stringWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"chatlog" withExtension:@"css"]
                                                   encoding:NSUTF8StringEncoding
                                                      error:NULL];
@@ -58,7 +65,7 @@
                               attributes:nil];
 }
 
-+ (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement {
+- (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement {
     return [NSXMLElement elementWithName:@"span" stringValue:@"You lost The Game."];
 }
 
