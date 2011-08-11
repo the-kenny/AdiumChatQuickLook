@@ -8,26 +8,6 @@
 
 #define HTML_FOOTER @"</body></html>"
 
-#define CHATLOG_STYLE \
-@"h1 {font-family: Helvetica, sans-serif;font-size: 10pt}" \
-@".other { color:blue; }" \
-@".me { color: green; }" \
-@"td.time {font-size: 10pt; color: grey;} "\
-@"tr {font-family: Helvetica; vertical-align: top;}" \
-@"td.who {font-size: 10pt; text-align: right; width: 15%;}" \
-@"td.status {font-size: 10pt; color: grey;}" \
-@"td.what {font-size: 10pt;}" 
-
-#define HTMLLOG_STYLE \
-@"h1 {font-family: Helvetica, sans-serif; font-size: 10pt;}" \
-@"body {font-family: Helvetica; font-size: 10pt;}" \
-@".receive { color:blue; }" \
-@".send { color: green; }" \
-@".timestamp { font-size:9pt; color: black;}" \
-@".message { color: black; font-family: \"andale mono\"; font-size: 10pt;}" \
-@"span ~ pre { margin-top: 0.1em; }"
-
-
 /* -----------------------------------------------------------------------------
  Generate a preview for file
  
@@ -74,6 +54,8 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 {
 	NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
 
+    NSBundle* currentBundle = [NSBundle bundleWithIdentifier:@"im.adium.quicklookImporter"];
+    
     //Looks like "normal" NSUserDefaults doesn't work with QuicklookImporter
     NSDictionary* userDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"im.adium.quicklookImporter"];
     BOOL debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
@@ -116,7 +98,11 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
         if(debugLog)
             NSLog(@"Found %lu message nodes", [messageNodes count]);
         
-		[html appendFormat: HTML_HEADER, CHATLOG_STYLE];
+        NSString* chatlogCss = [NSString stringWithContentsOfURL:[currentBundle URLForResource:@"chatlog" withExtension:@"css"]
+                                                        encoding:NSUTF8StringEncoding 
+                                                           error:nil];
+        
+		[html appendFormat:HTML_HEADER, chatlogCss];
 		[html appendFormat:@"<h1>Adium %@ chat log</h1>\n", service];
 	  
 		if ([messageNodes count] > 0) {
@@ -180,7 +166,11 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 			[html appendString:@"</table>"];
 		}
 	} else if ([[path pathExtension] isEqualToString:@"AdiumHTMLLog"]) {
-		[html appendFormat: HTML_HEADER, HTMLLOG_STYLE];
+        NSString* htmllogCss = [NSString stringWithContentsOfURL:[currentBundle URLForResource:@"htmllog" withExtension:@"css"]
+                                                        encoding:NSUTF8StringEncoding 
+                                                           error:nil];
+        
+		[html appendFormat: HTML_HEADER, htmllogCss];
 		[html appendFormat:@"<h1>Adium chat log</h1>\n"];
 
 		[html appendString:[NSString stringWithContentsOfURL: (NSURL*)url encoding: NSUTF8StringEncoding error:nil]];

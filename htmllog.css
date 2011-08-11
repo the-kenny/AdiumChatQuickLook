@@ -1,0 +1,33 @@
+
+h1 {
+    font-family: Helvetica, sans-serif; 
+    font-size: 10pt;
+}
+
+body {
+    font-family: Helvetica; 
+    font-size: 10pt;
+}
+
+.receive {
+    color:blue; 
+}
+
+.send { 
+    color: green;
+}
+
+.timestamp {
+    font-size:9pt;
+    color: black;
+}
+
+.message { 
+    color: black;
+    font-family: "andale mono";
+    font-size: 10pt;
+}
+
+span ~ pre {
+    margin-top: 0.1em; 
+}

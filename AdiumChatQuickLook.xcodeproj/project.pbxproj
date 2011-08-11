@@ -12,6 +12,8 @@
 		8D576312048677EA00EA77CD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB77B6FE84183AC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 		8D5B49A804867FD3000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D5B49A704867FD3000E48DA /* InfoPlist.strings */; };
+		8E0474E213F457DE00743D8D /* chatlog.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E0474E113F457DE00743D8D /* chatlog.css */; };
+		8E0474E513F4591800743D8D /* htmllog.css in Resources */ = {isa = PBXBuildFile; fileRef = 8E0474E413F4591800743D8D /* htmllog.css */; };
 		C86B05270671AA6E00DD9006 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C86B05260671AA6E00DD9006 /* CoreServices.framework */; };
 		EEE737F40D9C517D00DF38A3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE737F30D9C517D00DF38A3 /* Foundation.framework */; };
 		F28CFBFD0A3EC0AF000ABFF5 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F28CFBFC0A3EC0AF000ABFF5 /* ApplicationServices.framework */; };
@@ -26,6 +28,8 @@
 		61E3BCFA0870B4F2002186A0 /* GenerateThumbnailForURL.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GenerateThumbnailForURL.m; sourceTree = "<group>"; };
 		8D576316048677EA00EA77CD /* AdiumChatQuickLook.qlgenerator */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AdiumChatQuickLook.qlgenerator; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8E0474E113F457DE00743D8D /* chatlog.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = chatlog.css; sourceTree = "<group>"; };
+		8E0474E413F4591800743D8D /* htmllog.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = htmllog.css; sourceTree = "<group>"; };
 		C86B05260671AA6E00DD9006 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		EEE737F30D9C517D00DF38A3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		F28CFBFC0A3EC0AF000ABFF5 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -74,6 +78,8 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8E0474E113F457DE00743D8D /* chatlog.css */,
+				8E0474E413F4591800743D8D /* htmllog.css */,
 				8D576317048677EA00EA77CD /* Info.plist */,
 				8D5B49A704867FD3000E48DA /* InfoPlist.strings */,
 			);
@@ -162,6 +168,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D5B49A804867FD3000E48DA /* InfoPlist.strings in Resources */,
+				8E0474E213F457DE00743D8D /* chatlog.css in Resources */,
+				8E0474E513F4591800743D8D /* htmllog.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
