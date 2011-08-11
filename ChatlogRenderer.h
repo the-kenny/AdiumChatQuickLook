@@ -10,7 +10,13 @@
 
 @interface ChatlogRenderer : NSObject {
     NSURL* _url;
+    NSString* _account;
+    NSString* _service;
 }
+
+@property(retain) NSURL* url;
+@property(retain) NSString* account;
+@property(retain) NSString* service;
 
 - (NSString*)generateHTMLForURL:(NSURL*)url;
 

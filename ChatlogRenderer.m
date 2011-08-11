@@ -12,13 +12,17 @@
 
 #define PROJECT_ID @"im.adium.quicklookImporter"
 
+@synthesize url=_url;
+@synthesize account=_account;
+@synthesize service=_service;
+
 - (void)dealloc {
     [_url release];
     [super dealloc];
 }
 
 - (NSString*)generateHTMLForURL:(NSURL*)url {
-    _url = [url retain];
+    self.url = url;
     
     NSDictionary* userDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:PROJECT_ID];
     BOOL debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
@@ -27,7 +31,7 @@
     
     NSError* error = nil;
     NSXMLDocument *document = [[[NSXMLDocument alloc] initWithContentsOfURL:url
-                                                                    options:NULL
+                                                                    options:0
                                                                       error:&error] autorelease];
     
     if (!document || error) {
@@ -38,8 +42,8 @@
         NSLog(@"wholeTree: %@", document);
     
     NSXMLElement* chatNode = [[document nodesForXPath:@"/chat" error:&error] objectAtIndex:0];
-    NSString* account = [[chatNode attributeForName:@"account"] stringValue];
-    NSString* service = [[chatNode attributeForName:@"service"] stringValue];
+    self.account = [[chatNode attributeForName:@"account"] stringValue];
+    self.service = [[chatNode attributeForName:@"service"] stringValue];
 
     NSXMLElement* bodyElement = [NSXMLElement
                                  elementWithName:@"body" 
@@ -68,6 +72,7 @@
 - (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement {
     return [NSXMLElement elementWithName:@"span" stringValue:@"You lost The Game."];
 }
+
 
 #pragma mark - Utility Methods
 
