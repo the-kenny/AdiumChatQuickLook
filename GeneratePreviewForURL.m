@@ -15,6 +15,7 @@
 @"td.time {font-size: 10pt; color: grey;} "\
 @"tr {font-family: Helvetica; vertical-align: top;}" \
 @"td.who {font-size: 10pt; text-align: right; width: 15%;}" \
+@"td.status {font-size: 10pt; color: grey;}" \
 @"td.what {font-size: 10pt;}" 
 
 #define HTMLLOG_STYLE \
@@ -101,16 +102,20 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 			NSLog(@"Error reading the XML, %@", error);
 			goto bailout;
 		}
+        
+        if(debugLog)
+            NSLog(@"wholeTree: %@", document);
 	  
 		// Get the account name and protocol from the root node
 		NSXMLElement *chatNode = [[document nodesForXPath:@"//chat" error:&error] objectAtIndex:0];
 		NSString *account = [[chatNode attributeForName:@"account"] stringValue];
 		NSString *service = [[chatNode attributeForName:@"service"] stringValue];
 
-		// Top level node should be chat, look at children, but only get those
-		// that are messages (not events nor status)
-		NSArray *messageNodes = [document nodesForXPath:@"//message" error:nil];
+		NSArray *messageNodes = [document nodesForXPath:@"//message | //event | //status" error:nil];
 
+        if(debugLog)
+            NSLog(@"Found %lu message nodes", [messageNodes count]);
+        
 		[html appendFormat: HTML_HEADER, CHATLOG_STYLE];
 		[html appendFormat:@"<h1>Adium %@ chat log</h1>\n", service];
 	  
@@ -131,31 +136,46 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 					break;
                 }
                 
-				NSString *alias = [[message attributeForName:@"alias"] stringValue];
-				NSString *sender = [[message attributeForName:@"sender"] stringValue];
-				NSString *spanstyle = [sender caseInsensitiveCompare:account] == NSOrderedSame ? @"me" : @"other";
+                if([[message name] isEqualToString:@"event"]) {
+                    if(debugLog)
+                        NSLog(@"event node: %@", message);
+                } else if([[message name] isEqualToString:@"status"]) { 
+                    if(debugLog)
+                        NSLog(@"status node: %@", message);
 
-				NSString *date = [[message attributeForName:@"time"] stringValue];
-				NSString *time = formatDate(date);
-								
-				// Use alias if it is shorter
-				if (alias && [alias length] < [sender length])
-					sender = alias;
-              
-				// Extract the message tag, we could get rid of the span tag too.
-				NSXMLElement *content = [[message elementsForName:@"div"] objectAtIndex:0];
-                if(stripFontStyles == YES) {
-                    removeStyleRecursive(content);
+                    NSArray *divs = [message elementsForName:@"div"];
+                    if([divs count] > 0) {
+                        NSXMLElement* el = [divs objectAtIndex:0];
+                        removeStyleRecursive(el);
+                        [html appendFormat:@"<tr><td class=\"status\" colspan=\"3\">%@</td></tr>\n", el];
+                    }
+                } else if([[message name] isEqualToString:@"message"]) {
+                    NSString *alias = [[message attributeForName:@"alias"] stringValue];
+                    NSString *sender = [[message attributeForName:@"sender"] stringValue];
+                    NSString *spanstyle = [sender caseInsensitiveCompare:account] == NSOrderedSame ? @"me" : @"other";
+                    
+                    NSString *date = [[message attributeForName:@"time"] stringValue];
+                    NSString *time = formatDate(date);
+                    
+                    // Use alias if it is shorter
+                    if (alias && [alias length] < [sender length])
+                        sender = alias;
+                    
+                    // Extract the message tag, we could get rid of the span tag too.
+                    NSXMLElement *content = [[message elementsForName:@"div"] objectAtIndex:0];
+                    if(stripFontStyles == YES) {
+                        removeStyleRecursive(content);
+                    }
+                    
+                    if(debugLog)
+                        NSLog(@"message node: %@", content);
+                    
+                    [html appendFormat: 
+                     @"<tr><td class=\"time\">%@</td><td class=\"who\"><span class=\"%@\">%@</span>:</td><td class=\"what\">%@</td></tr>\n", 
+                     time, spanstyle, sender, content];
+                    
+                    ++currentMessage;
                 }
-                
-                if(debugLog)
-                    NSLog(@"%@", content);
-                
-				[html appendFormat: 
-					@"<tr><td class=\"time\">%@</td><td class=\"who\"><span class=\"%@\">%@</span>:</td><td class=\"what\">%@</td></tr>\n", 
-					time, spanstyle, sender, content];
-                
-                ++currentMessage;
 			}
 			[html appendString:@"</table>"];
 		}
