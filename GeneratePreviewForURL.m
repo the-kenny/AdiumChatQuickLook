@@ -3,6 +3,8 @@
 #include <CoreServices/CoreServices.h>
 #include <QuickLook/QuickLook.h>
 
+#import "ChatlogRenderer.h"
+
 #define HTML_HEADER \
 @"<html><head><style>%@</style></head><body bgcolor=white>"
 
@@ -52,6 +54,40 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
                                CFStringRef contentTypeUTI,
                                CFDictionaryRef options)
 {
+#if 1
+    NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
+    
+	NSString *path = [(NSURL *)url path];
+    
+	if ([[path pathExtension] isEqualToString:@"chatlog"]) {
+		BOOL isDir = NO;
+		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir])
+			return 1;
+        
+		if (isDir) {
+			// is bundle
+			path = [path stringByAppendingPathComponent:[path lastPathComponent]];
+			path = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"xml"];
+			if (! [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] || isDir )
+				return 1;
+		}
+        
+        NSString* returnValue = [ChatlogRenderer generateHTMLForURL:[NSURL fileURLWithPath:path]];
+        
+        NSDictionary *props = [NSDictionary dictionaryWithObjectsAndKeys:
+                               @"UTF-8", (NSString *)kQLPreviewPropertyTextEncodingNameKey,
+                               @"text/html", (NSString *)kQLPreviewPropertyMIMETypeKey,
+                               nil];
+        QLPreviewRequestSetDataRepresentation(preview, (CFDataRef)[returnValue dataUsingEncoding:NSUTF8StringEncoding], 
+                                              kUTTypeHTML, 
+                                              (CFDictionaryRef)props);
+    }
+    
+    [pool release];
+    return 0;
+    
+#else
+    
 	NSAutoreleasePool *  pool = [[NSAutoreleasePool alloc] init];
 
     NSBundle* currentBundle = [NSBundle bundleWithIdentifier:@"im.adium.quicklookImporter"];
@@ -193,6 +229,7 @@ OSStatus GeneratePreviewForURL(void *thisInterface,
 bailout:		
 	[pool release];
 	return noErr;            // Apple's documentation states this is the only return code to be used
+#endif
 }
 
 void CancelPreviewGeneration(void* thisInterface, QLPreviewRequestRef preview)
