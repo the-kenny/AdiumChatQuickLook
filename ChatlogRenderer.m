@@ -17,7 +17,6 @@
 @synthesize service=_service;
 
 - (void)dealloc {
-    [_url release];
     [super dealloc];
 }
 
