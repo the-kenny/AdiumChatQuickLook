@@ -12,6 +12,9 @@
     NSURL* _url;
     NSString* _account;
     NSString* _service;
+    
+    BOOL stripFontStyles;
+    BOOL debugLog;
 }
 
 @property(retain) NSURL* url;
@@ -22,6 +25,7 @@
 
 - (NSXMLElement*)generateHead;
 - (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement;
+- (NSXMLElement*)generateMessageRow:(NSXMLElement*)message;
 
 + (NSString*)formatDate:(NSString*)s;
 + (void)removeStyleRecursive:(NSXMLElement*)el;

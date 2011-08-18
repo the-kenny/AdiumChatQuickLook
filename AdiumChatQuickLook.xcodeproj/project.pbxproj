@@ -245,7 +245,6 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Library/QuickLook;
 				PRODUCT_NAME = AdiumChatQuickLook;
-				VALID_ARCHS = "i386 ppc";
 				WRAPPER_EXTENSION = qlgenerator;
 				ZERO_LINK = YES;
 			};
@@ -260,7 +259,6 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Library/QuickLook;
 				PRODUCT_NAME = AdiumChatQuickLook;
-				VALID_ARCHS = "x86_64 i386 ppc";
 				WRAPPER_EXTENSION = qlgenerator;
 			};
 			name = Release;

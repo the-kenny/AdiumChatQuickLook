@@ -25,9 +25,9 @@
     self.url = url;
     
     NSDictionary* userDefaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:PROJECT_ID];
-    BOOL debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
-    BOOL stripFontStyles = [[userDefaults valueForKey:@"stripStyles"] boolValue];
-    NSUInteger messageLimit = [[userDefaults valueForKey:@"messageLimit"] unsignedIntegerValue];
+    debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
+    stripFontStyles = [[userDefaults valueForKey:@"stripStyles"] boolValue];
+    //NSUInteger messageLimit = [[userDefaults valueForKey:@"messageLimit"] unsignedIntegerValue];
     
     NSError* error = nil;
     NSXMLDocument *document = [[[NSXMLDocument alloc] initWithContentsOfURL:url
@@ -70,10 +70,58 @@
 }
 
 - (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement {
-    return [NSXMLElement elementWithName:@"span" stringValue:@"You lost The Game."];
+    NSXMLElement* table = [NSXMLElement elementWithName:@"table"];
+    
+    for(NSXMLElement* node in [chatElement children]) {
+        if([node.name isEqualToString:@"message"]) {
+            [table addChild:[self generateMessageRow:node]];
+        }
+    }
+    
+    return table;
 }
 
+- (NSXMLElement*)generateTimestampFromMessage:(NSXMLElement*)message {
+    NSString* timeString = [[message attributeForName:@"time"] stringValue];
+    if(!timeString)
+        return nil;
+    
+    return [NSXMLElement elementWithName:@"td" 
+                                children:[NSArray arrayWithObject:[NSXMLElement textWithStringValue:[ChatlogRenderer 
+                                                                                                     formatDate:timeString]]]
+                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:@"time"]]];
+}
 
+- (NSXMLElement*)generateNameFromMessage:(NSXMLElement*)message {
+    NSString* name = [[message attributeForName:@"alias"] stringValue];
+    if(!name) name = [[message attributeForName:@"sender"] stringValue];
+    
+    //TODO: Color for me/other
+    return [NSXMLElement elementWithName:@"td" 
+                                children:[NSArray arrayWithObject:[NSXMLElement textWithStringValue:name]]
+                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:@"who"]]];
+}
+
+- (NSXMLElement*)generateTextFromMessage:(NSXMLElement*)message {
+    NSXMLElement *content = [[[message objectsForXQuery:@".//div" error:NULL] objectAtIndex:0] copy];
+    
+    if(stripFontStyles == YES)
+        [ChatlogRenderer removeStyleRecursive:content];
+    
+    return [NSXMLElement elementWithName:@"td" 
+                                children:[NSArray arrayWithObject:content]
+                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:@"what"]]];
+}
+
+- (NSXMLElement*)generateMessageRow:(NSXMLElement*)message {
+    return [NSXMLElement elementWithName:@"tr"
+                                children:[NSArray arrayWithObjects:
+                                          [self generateTimestampFromMessage:message],
+                                          [self generateNameFromMessage:message],
+                                          [self generateTextFromMessage:message], nil]
+                              attributes:nil];
+}
+    
 #pragma mark - Utility Methods
 
 + (NSString*)formatDate:(NSString*)s {
@@ -101,7 +149,7 @@
         [el removeAttributeForName:@"class"];
         [el removeAttributeForName:@"style"];
     }
-    
+
     for(NSXMLElement* child in [el children]) {
         [self removeStyleRecursive:child];
     }
