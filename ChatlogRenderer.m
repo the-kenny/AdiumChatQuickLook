@@ -96,10 +96,15 @@
     NSString* name = [[message attributeForName:@"alias"] stringValue];
     if(!name) name = [[message attributeForName:@"sender"] stringValue];
     
-    //TODO: Color for me/other
+    NSString* classString = nil;
+    if([[[message attributeForName:@"sender"] stringValue] isEqualToString:self.account])
+        classString = @"who me";
+    else
+        classString = @"who other";
+    
     return [NSXMLElement elementWithName:@"td" 
                                 children:[NSArray arrayWithObject:[NSXMLElement textWithStringValue:name]]
-                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:@"who"]]];
+                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:classString]]];
 }
 
 - (NSXMLElement*)generateTextFromMessage:(NSXMLElement*)message {
