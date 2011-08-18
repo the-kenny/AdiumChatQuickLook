@@ -17,6 +17,7 @@
 @synthesize service=_service;
 
 - (void)dealloc {
+    [rendererBundle release];
     [super dealloc];
 }
 
@@ -27,6 +28,9 @@
     debugLog = [[userDefaults valueForKey:@"debugLog"] boolValue];
     stripFontStyles = [[userDefaults valueForKey:@"stripStyles"] boolValue];
     //NSUInteger messageLimit = [[userDefaults valueForKey:@"messageLimit"] unsignedIntegerValue];
+    
+#warning This is a workaround for getting a working NSBundle. When included in Adium, [NSBundle mainBundle] should work
+    rendererBundle = [[NSBundle bundleWithIdentifier:PROJECT_ID] retain];
     
     NSError* error = nil;
     NSXMLDocument *document = [[[NSXMLDocument alloc] initWithContentsOfURL:url
@@ -54,15 +58,24 @@
                                                                bodyElement, nil]
                                                    attributes:nil];
     
+    if(debugLog)
+        NSLog(@"html: %@", htmlElement);
+    
     return [NSString stringWithFormat:@"%@", htmlElement];
 }
                                  
 #pragma mark - Methods to generate HTML
                                  
 - (NSXMLElement*)generateHead {
-    NSString* cssStyle = [NSString stringWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"chatlog" withExtension:@"css"]
+    NSError* error = nil;
+    NSString* cssStyle = [NSString stringWithContentsOfURL:[rendererBundle URLForResource:@"chatlog" withExtension:@"css"]
                                                   encoding:NSUTF8StringEncoding
-                                                     error:NULL];
+                                                     error:&error];
+    if(error) {
+        NSLog(@"Error loading style: %@", [error description]);
+        error = nil;
+    }
+    
     return [NSXMLElement elementWithName:@"head"
                                 children:[NSArray arrayWithObject:[NSXMLElement elementWithName:@"style" stringValue:cssStyle]]
                               attributes:nil];

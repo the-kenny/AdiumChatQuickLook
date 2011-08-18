@@ -15,6 +15,8 @@
     
     BOOL stripFontStyles;
     BOOL debugLog;
+    
+    NSBundle* rendererBundle;
 }
 
 @property(retain) NSURL* url;
