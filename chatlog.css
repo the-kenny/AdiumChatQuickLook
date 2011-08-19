@@ -1,31 +1,38 @@
 h1 {
-    font-family: Helvetica, sans-serif;font-size: 10pt
+    font-family: Helvetica, sans-serif;
+    font-size: 10pt
+}
+
+tr {
+    font-family: Helvetica; 
+    vertical-align: top;
+}
+
+td.time {
+    font-size: 10pt;
+    color: grey;
+} 
+
+td.who {
+    font-size: 10pt;
+    text-align: right; 
+    width: 15%;
+    padding-right: 5pt;
 }
 
 .other { 
-    color:blue; 
+    color: blue; 
 }
 
 .me { 
     color: green; 
 }
 
-td.time {
-    font-size: 10pt; color: grey;
-} 
-
-tr {
-    font-family: Helvetica; vertical-align: top;
-}
-
-td.who {
-    font-size: 10pt; text-align: right; width: 15%;
+td.what {
+    font-size: 10pt;
 }
 
 td.status {
-    font-size: 10pt; color: grey;
-}
-
-td.what {
-    font-size: 10pt;
+    font-size: 10pt; 
+    color: grey;
 }

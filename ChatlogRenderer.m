@@ -105,18 +105,19 @@
 }
 
 - (NSXMLElement*)generateNameFromMessage:(NSXMLElement*)message {
+    NSString* sender = [[message attributeForName:@"sender"] stringValue];
     NSString* name = [[message attributeForName:@"alias"] stringValue];
-    if(!name) name = [[message attributeForName:@"sender"] stringValue];
+    if(!name) name = sender;
     
-    NSString* classString = nil;
-    if([[[message attributeForName:@"sender"] stringValue] isEqualToString:self.account])
-        classString = @"who me";
-    else
-        classString = @"who other";
+    NSString *spanstyle = [sender caseInsensitiveCompare:self.account] == NSOrderedSame ? @"me" : @"other";
+    NSXMLElement* span = [NSXMLElement elementWithName:@"span"
+                                              children:[NSArray arrayWithObject:[NSXMLElement textWithStringValue:name]]
+                                            attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" 
+                                                                                                    stringValue:spanstyle]]];
     
     return [NSXMLElement elementWithName:@"td" 
-                                children:[NSArray arrayWithObject:[NSXMLElement textWithStringValue:name]]
-                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:classString]]];
+                                children:[NSArray arrayWithObjects:span, [NSXMLElement textWithStringValue:@":"], nil]
+                              attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"class" stringValue:@"who"]]];
 }
 
 - (NSXMLElement*)generateTextFromMessage:(NSXMLElement*)message {
