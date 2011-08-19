@@ -85,8 +85,12 @@
     NSXMLElement* table = [NSXMLElement elementWithName:@"table"];
     
     for(NSXMLElement* node in [chatElement children]) {
-        if([node.name isEqualToString:@"message"]) {
+        if([node.name caseInsensitiveCompare:@"message"] == NSOrderedSame) {
             [table addChild:[self generateMessageRow:node]];
+        } else if([node.name caseInsensitiveCompare:@"event"] == NSOrderedSame) {
+            [table addChild:[self generateEventRow:node]];
+        } else if([node.name caseInsensitiveCompare:@"status"] == NSOrderedSame) {
+            [table addChild:[self generateStatusRow:node]];
         }
     }
     
@@ -138,6 +142,14 @@
                                           [self generateNameFromMessage:message],
                                           [self generateTextFromMessage:message], nil]
                               attributes:nil];
+}
+
+- (NSXMLElement*)generateEventRow:(NSXMLElement*)event {
+    return nil;
+}
+
+- (NSXMLElement*)generateStatusRow:(NSXMLElement*)status {
+    return nil;
 }
     
 #pragma mark - Utility Methods

@@ -28,6 +28,8 @@
 - (NSXMLElement*)generateHead;
 - (NSXMLElement*)generateTableFromChatElement:(NSXMLElement*)chatElement;
 - (NSXMLElement*)generateMessageRow:(NSXMLElement*)message;
+- (NSXMLElement*)generateEventRow:(NSXMLElement*)event;
+- (NSXMLElement*)generateStatusRow:(NSXMLElement*)status;
 
 + (NSString*)formatDate:(NSString*)s;
 + (void)removeStyleRecursive:(NSXMLElement*)el;
