@@ -204,7 +204,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "killall quicklookd32; true\n";
+			shellScript = "killall quicklookd\nkillall quicklookd32\ntrue\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
