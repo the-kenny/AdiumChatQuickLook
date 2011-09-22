@@ -1,6 +1,9 @@
+* {
+    font-size: 10pt; 
+}
+
 h1 {
     font-family: Helvetica, sans-serif;
-    font-size: 10pt
 }
 
 tr {
@@ -9,12 +12,10 @@ tr {
 }
 
 td.time {
-    font-size: 10pt;
     color: grey;
 } 
 
 td.who {
-    font-size: 10pt;
     text-align: right; 
     width: 15%;
     padding-right: 5pt;
@@ -29,10 +30,12 @@ td.who {
 }
 
 td.what {
-    font-size: 10pt;
 }
 
 td.status {
-    font-size: 10pt; 
-    color: grey;
+    color: gray;
+}
+
+td.event {
+    color: gray;
 }

@@ -149,7 +149,37 @@
 }
 
 - (NSXMLElement*)generateStatusRow:(NSXMLElement*)status {
-    return nil;
+    NSLog(@"statusRow: %@:", status);
+    
+    NSString* sender = [[status attributeForName:@"sender"] stringValue];
+    
+    if([sender isEqual:self.account]) {
+        //My own event!
+        NSXMLElement* content = [[[status objectsForXQuery:@".//div" error:NULL] objectAtIndex:0] copy];
+        if(stripFontStyles == YES)
+            [ChatlogRenderer removeStyleRecursive:content];
+        
+        NSString* eventString = [NSString stringWithFormat:@"%@ (%@)", 
+                                 [[content childAtIndex:0] stringValue],
+                                 [ChatlogRenderer formatDate:[[status attributeForName:@"time"] stringValue]]];
+        
+        content = [NSXMLElement elementWithName:@"div" 
+                                       children:[NSArray arrayWithObject:[NSXMLElement textWithStringValue:eventString]]
+                                     attributes:nil];
+        
+        NSXMLElement* row = [NSXMLElement elementWithName:@"td"
+                                                 children:[NSArray arrayWithObject:content]
+                                               attributes:[NSArray arrayWithObjects:
+                                                           [NSXMLElement attributeWithName:@"class" 
+                                                                               stringValue:@"event"],
+                                                           [NSXMLElement attributeWithName:@"colspan" 
+                                                                               stringValue:@"3"], nil]];
+        return [NSXMLElement elementWithName:@"tr"
+                                    children:[NSArray arrayWithObject:row]
+                                  attributes:nil];
+    } else {
+        return nil;
+    }
 }
     
 #pragma mark - Utility Methods
